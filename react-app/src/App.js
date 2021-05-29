@@ -12,6 +12,7 @@ import reduxThunk from "redux-thunk";
 import Header from './components/Header'
 import Team from './components/Team'
 import Players from './components/Players'
+// import Home from './components/home'
 
 const persistConfig = {
   key: "root",
@@ -37,11 +38,9 @@ class App extends Component {
     <Provider store={store}>
     <Router>
         <Header></Header>
-      <div>
-        <Team></Team>
-      <Route path="/" component={Team} />
+        {/* <Route path="/" component={Home} /> */}
+      <Route path="/team" component={Team} />
       <Route path="/players" component={Players} />
-      </div>
     </Router>
     </Provider>
   );

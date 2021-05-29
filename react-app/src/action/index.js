@@ -14,18 +14,7 @@ export function fetchPlayers() {
         axios
         .get(`http://localhost:8080/team`)
           .then((response) => {
-            var manupulate = []
             const p = response.data;
-            // p.map(ele=>
-            //   ele.player(element=>{
-            //     manupulate.push({
-            //       "team":ele,
-            //       "player":element
-            //     })
-            //   })
-            // )
-
-            // console.log(p)
             dispatch({
               type: FETCH_PLAYERS,
               payload: p,
@@ -37,16 +26,35 @@ export function fetchPlayers() {
     };
   }
 
-export function updatePlayers() {
+export function deletePlayers(obj) {
     return function (dispatch) {
       try {
         axios
-          .get(`${server}/player`)
+          .put(`http://localhost:8080/team`,obj)
           .then((response) => {
-            const player = response.data.data.signals;
+            const player = response.data;
             // console.log(status);
             dispatch({
-              type: UPDATE_PLAYERS,
+              type: FETCH_TEAM,
+              payload: player,
+            });
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  }
+
+  export function addPlayers(obj) {
+    return function (dispatch) {
+      try {
+        axios
+          .put(`http://localhost:8080/team`,obj)
+          .then((response) => {
+            const player = response.data;
+            // console.log(status);
+            dispatch({
+              type: FETCH_TEAM,
               payload: player,
             });
           });
@@ -61,6 +69,44 @@ export function updatePlayers() {
       try {
         axios
           .get(`http://localhost:8080/team`)
+          .then((response) => {
+            const team = response.data;
+            // console.log("inreduced",team);
+            dispatch({
+              type: FETCH_TEAM,
+              payload: team,
+            });
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  }
+
+  export function addTeam(str) {
+    return function (dispatch) {
+      try {
+        axios
+          .post(`http://localhost:8080/team`,{data:{ title: str }})
+          .then((response) => {
+            const team = response.data;
+            // console.log("inreduced",team);
+            dispatch({
+              type: FETCH_TEAM,
+              payload: team,
+            });
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  }
+
+  export function deleteTeam(id) {
+    return function (dispatch) {
+      try {
+        axios
+          .delete(`http://localhost:8080/team`,{data:{ "id": id }})
           .then((response) => {
             const team = response.data;
             // console.log("inreduced",team);

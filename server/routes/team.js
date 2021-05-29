@@ -3,7 +3,7 @@ var Team = require('../models/team');
 var router = express.Router();
 
 router.get('/', function(req, res){
-    console.log('getting all books');
+    console.log('getting all team');
     Team.find({}).exec(function(err, team){
         if(err) {
             res.send('error has occured');
@@ -14,10 +14,10 @@ router.get('/', function(req, res){
     });
 });
 
-router.get('/:id', function(req, res){
-    console.log('getting one book');
+router.get('/oneteam', function(req, res){
+    console.log('getting one team');
     Team.findOne({
-        _id: req.params.id
+        _id: req.body.id
     }).exec(function(err, team){
         if(err) {
             res.send('error has occured');
@@ -30,21 +30,28 @@ router.get('/:id', function(req, res){
 
 router.post('/', function(req, res){
     var newTeam = new Team();
-    newTeam.title = req.body.title;
-    newTeam.player = req.body.player;
+    newTeam.title = req.body.data.title;
+    newTeam.player = req.body.data.player;
     newTeam.save(function(err, team){
         if(err) {
-            res.send('error saving book');
+            res.send('error saving team');
         } else {
             console.log(team);
-            res.send(team);
+            Team.find({}).exec(function(err, teams){
+                if(err) {
+                    res.send('error has occured');
+                } else {
+                    console.log(teams);
+                    res.json(teams);
+                }
+            });
         }
     });
 });
 
-router.put('/:id', function(req, res){
+router.put('/', function(req, res){
     Team.findOneAndUpdate({
-        _id: req.params.id
+        _id: req.body.id
     },{
         $set: {
             title: req.body.title,
@@ -54,23 +61,39 @@ router.put('/:id', function(req, res){
         upsert: true
     },function(err, newTeam){
         if(err) {
-            res.send('error updating book');
+            res.send('error updating team');
         } else {
             console.log(newTeam);
-            res.send(newTeam);
+            Team.find({}).exec(function(err, teams){
+                if(err) {
+                    res.send('error has occured');
+                } else {
+                    console.log(teams);
+                    res.json(teams);
+                }
+            });
         }
     });
 });
 
-router.delete('/:id', function(req, res){
+router.delete('/', function(req, res){
+    // console.log("request=========================>",req)
     Team.findByIdAndRemove({
-        _id: req.params.id
+        _id: req.body.id
     },function(err, team){
         if(err) {
-            res.send('error deleting book');
+            // console.log("error=================>",err)
+            res.send('error deleting team');
         } else {
             console.log(team);
-            res.send(team);
+            Team.find({}).exec(function(err, teams){
+                if(err) {
+                    res.send('error has occured');
+                } else {
+                    console.log(teams);
+                    res.json(teams);
+                }
+            });
         }
     });
 });
